@@ -31,7 +31,7 @@ jobs:
 
     - name: Uploading a firmware to ESP32
       run: >
-        curl -# -v -X POST
+        curl -# -v POST
         'http://ota-test:3232/update'
         -H 'Accept: */*'
         -H 'Accept-Encoding: gzip, deflate'

@@ -8,6 +8,13 @@
 #include "credentials.h"
 #else
 
+#ifndef WIFI_SSID
+#define WIFI_SSID "wifi_ssid"
+#endif
+#ifndef WIFI_PASS
+#define WIFI_PASS "wifi_pass"
+#endif
+
 // WiFi credentials
 const char *ssid = WIFI_SSID;
 const char *password = WIFI_PASS;

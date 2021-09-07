@@ -25,3 +25,13 @@ jobs:
         curl https://install.husarnet.com/install.sh | sudo bash
         sudo systemctl restart husarnet
         sudo husarnet join ${{ secrets.HUSARNET_JOINCODE }} github
+
+    - name: Uploading a firmware to ESP32
+      run: >
+        curl -# -v -X POST
+        'http://ota-test:3232/update'
+        -H 'Accept: */*'
+        -H 'Accept-Encoding: gzip, deflate'
+        -H 'Connection: keep-alive'
+        --form "MD5="$(md5sum "${{ github.workspace }}/.pio/build/esp32dev/firmware.bin" | cut -d ' ' -f 1)""
+        --form 'firmware=@${{ github.workspace }}/.pio/build/esp32dev/firmware.bin'

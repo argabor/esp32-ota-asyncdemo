@@ -20,6 +20,7 @@ jobs:
         sudo bash -c "echo ${{ secrets.HUSARNET_ID }} > /var/lib/husarnet/id"
         sudo systemctl restart husarnet
         sudo husarnet status
+        sudo cat /var/lib/husarnet/id
         sudo husarnet join ${{ secrets.HUSARNET_JOINCODE }} github
 
     - name: Installing platformio & build

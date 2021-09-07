@@ -31,6 +31,9 @@ jobs:
 
     - name: Pinging ESP32
       run: ping6 -c 10 ota-test
+
+    - name: Husarnet status
+      run: sudo husarnet status
         
     - name: Uploading a firmware to ESP32
       run: >

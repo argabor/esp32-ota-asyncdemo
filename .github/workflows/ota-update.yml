@@ -15,8 +15,8 @@ jobs:
 
     - name: Installing platformio & build
       run: |
-        ENV_WIFI_SSID={{ secrets.WIFI_SSID }}
-        ENV_WIFI_PASS={{ secrets.WIFI_PASS }}
+        ENV_WIFI_SSID=${{ secrets.WIFI_SSID }}
+        ENV_WIFI_PASS=${{ secrets.WIFI_PASS }}
         echo target SSID: $ENV_WIFI_SSID
         pip3 install -U platformio
         pio run

@@ -16,7 +16,7 @@ jobs:
     - name: Installing platformio & build
       run: |
         pip3 install -U platformio
-        pio run -D WIFI_SSID="${{ secrets.WIFI_SSID }}" -D WIFI_PASS="${{ secrets.WIFI_PASS }}"
+        pio run
         ls -la
         ls .pio/build/esp32dev
         

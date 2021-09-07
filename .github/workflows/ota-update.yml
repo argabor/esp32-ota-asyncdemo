@@ -13,10 +13,15 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Install platformio & build
+    - name: Installing platformio & build
       run: |
         pip3 install -U platformio
         pio run 
         ls -la
         ls .pio/build/esp32dev
         
+    - name: Installing & Connecting Husarnet
+      run: |
+        curl https://install.husarnet.com/install.sh | sudo bash
+        sudo systemctl restart husarnet
+        sudo husarnet join ${{ secrets.HUSARNET_JOINCODE }} github

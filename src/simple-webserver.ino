@@ -9,8 +9,8 @@
 #else
 
 // WiFi credentials
-const char *ssid = "MY_WIFI_SSID";
-const char *password = "MY_WIFI_PASS";
+const char *ssid = WIFI_SSID;
+const char *password = WIFI_PASS;
 
 // Husarnet credentials
 const char *hostName = "ota-test";
@@ -24,6 +24,7 @@ AsyncWebServer server(3232);
 void setup(void)
 {
   Serial.begin(115200);
+  Serial.printf("Connecting to: %s Wi-Fi network", ssid);
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
   Serial.println("");

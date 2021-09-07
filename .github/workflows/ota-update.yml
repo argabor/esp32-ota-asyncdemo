@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - 'main'
-  
+
 jobs:
   build:
     runs-on: ubuntu-20.04
@@ -13,11 +13,11 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
+      # sudo mkdir -p /var/lib/husarnet && sudo touch $_/id
     - name: Installing & Connecting Husarnet
       run: |
-        sudo mkdir -p /var/lib/husarnet && sudo touch $_/id
-        sudo bash -c "echo ${{ secrets.HUSARNET_ID }} > /var/lib/husarnet/id"
         curl https://install.husarnet.com/install.sh | sudo bash
+        sudo bash -c "echo ${{ secrets.HUSARNET_ID }} > /var/lib/husarnet/id"
         sudo systemctl restart husarnet
         sudo husarnet status
         sudo husarnet join ${{ secrets.HUSARNET_JOINCODE }} github

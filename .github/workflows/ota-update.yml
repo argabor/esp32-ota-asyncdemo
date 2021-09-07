@@ -15,6 +15,7 @@ jobs:
 
     - name: Installing & Connecting Husarnet
       run: |
+        sudo mkdir -p /var/lib/husarnet && touch $_/id
         sudo bash -c "echo ${{ secrets.HUSARNET_ID }} > /var/lib/husarnet/id"
         curl https://install.husarnet.com/install.sh | sudo bash
         sudo systemctl restart husarnet

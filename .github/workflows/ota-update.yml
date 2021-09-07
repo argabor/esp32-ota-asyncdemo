@@ -13,9 +13,10 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Install Platformio
+    - name: Install platformio & build
       run: |
         pip3 install -U platformio
         pio run 
-        ls -l
+        ls -la
+        ls .pio/build/esp32dev
         

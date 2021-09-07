@@ -1,0 +1,21 @@
+name: Upload ISO file
+
+on:
+  push:
+    branches:
+      - 'main'
+  
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Install Platformio
+      run: |
+        pip3 install -U platformio
+        pio run 
+        ls -l
+        

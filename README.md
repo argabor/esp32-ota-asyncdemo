@@ -2,6 +2,15 @@
 
 Read more [here](https://husarnet.com/blog/internet-ota-esp32)
 
+## Quick start
+
+```bash
+export ENV_WIFI_SSID=YOUR_WIFI_SSID
+export ENV_WIFI_PASS=YOUR_WIFI_PASS
+export ENV_HUSARNET_JOINCODE=YOUR_JOIN_CODE
+pio run -t upload
+```
+
 ## Making a custom HTTP request with `cURL`:
 
 ```bash
@@ -30,4 +39,10 @@ pip install -U platformio
 
 ```bash
 pio run --target erase
+```
+
+### Monitoring network traffic on `hnet0` interface
+
+```bash
+sudo tcpflow -p -c -i hnet0
 ```

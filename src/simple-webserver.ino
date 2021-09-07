@@ -9,10 +9,13 @@
 #else
 
 #ifndef WIFI_SSID
-#define WIFI_SSID "wifi_ssid"
+#error You need to define WIFI_SSID!
 #endif
 #ifndef WIFI_PASS
-#define WIFI_PASS "wifi_pass"
+#error You need to define WIFI_PASS!
+#endif
+#ifndef HUSARNET_JOINCODE
+#error You need to define HUSARNET_JOINCODE!
 #endif
 
 // WiFi credentials
@@ -21,7 +24,7 @@ const char *password = WIFI_PASS;
 
 // Husarnet credentials
 const char *hostName = "ota-test";
-const char *husarnetJoinCode = "fc94:b01d:1803:8dd8:b293:5c7d:7639:932a/xxxxxxxxxxxxxxxxxxxxxxx"; // find at app.husarnet.com
+const char *husarnetJoinCode = HUSARNET_JOINCODE; // find at app.husarnet.com
 const char *dashboardURL = "default";
 
 #endif

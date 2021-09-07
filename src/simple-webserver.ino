@@ -46,7 +46,7 @@ void setup(void)
   Husarnet.start();
 
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
-    request->send(200, "text/plain", "Hi! I am ESP32.");
+    request->send(200, "text/plain", "Hi! I am ESP32?");
   });
 
   AsyncElegantOTA.begin(&server); // Start ElegantOTA

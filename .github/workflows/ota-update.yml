@@ -20,12 +20,12 @@ jobs:
       continue-on-error: true
 
       # sudo mkdir -p /var/lib/husarnet && sudo touch $_/id
+      # sudo chmod 777 /var/lib/husarnet
     - name: Installing & Connecting Husarnet
       run: |
         curl https://install.husarnet.com/install.sh | sudo bash
         sudo systemctl restart husarnet
         sleep 5
-        sudo chmod 777 /var/lib/husarnet
         sudo husarnet status
         sudo husarnet join ${{ secrets.HUSARNET_JOINCODE }} github
 

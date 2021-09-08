@@ -25,16 +25,18 @@ jobs:
       run: |
         curl https://install.husarnet.com/install.sh | sudo bash
         sudo systemctl restart husarnet
-        sleep 1
+        sleep 5
+        sudo husarnet status
+        sudo husarnet join ${{ secrets.HUSARNET_JOINCODE }} github
+
+    - name: Change settings for folder to be stored
+      run: |
         sudo chmod 666 /var/lib/husarnet/config.db
         sudo chmod 777 /var/lib/husarnet/control.sock
         sudo chmod 666 /var/lib/husarnet/http_secret
         sudo chmod 666 /var/lib/husarnet/id
         sudo chmod 666 /var/lib/husarnet/license.json
         sudo chmod 666 /var/lib/husarnet
-        sleep 5
-        sudo husarnet status
-        sudo husarnet join ${{ secrets.HUSARNET_JOINCODE }} github
 
     - name: Archive Husarnet ID
       uses: actions/upload-artifact@v2

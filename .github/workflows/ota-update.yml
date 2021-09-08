@@ -18,11 +18,13 @@ jobs:
       run: |
         curl https://install.husarnet.com/install.sh | sudo bash
         sudo systemctl restart husarnet
+        echo addr after installation:
+        sudo husarnet status
         sleep 5
         sudo bash -c "echo ${{ secrets.HUSARNET_ID }} > /var/lib/husarnet/id"
         sleep 5
         sudo systemctl restart husarnet
-        sleep 10
+        sleep 5
         sudo husarnet status
         sudo husarnet join ${{ secrets.HUSARNET_JOINCODE }} github
 

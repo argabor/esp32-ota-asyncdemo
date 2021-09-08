@@ -13,21 +13,25 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Download Husarnet ID
-      uses: actions/download-artifact@v2
+    - name: Cache multiple paths
+      uses: actions/cache@v2
       with:
-        name: husarnet-id
-      continue-on-error: true
+        id: cache-husarnet-v
+        path: /var/lib/husarnet
+        key: husarnet-v
 
       # sudo mkdir -p /var/lib/husarnet && sudo touch $_/id
       # 
-    - name: Installing & Connecting Husarnet
+    - name: Installing Husarnet
       run: |
         curl https://install.husarnet.com/install.sh | sudo bash
         sudo systemctl restart husarnet
         sleep 5
         sudo husarnet status
-        sudo husarnet join ${{ secrets.HUSARNET_JOINCODE }} github
+
+    - name: Joining Husarnet network
+      if: steps.cache-husarnet-v.outputs.cache-hit != 'true'
+      run: sudo husarnet join ${{ secrets.HUSARNET_JOINCODE }} github
 
 
     # - name: Change settings for folder to be stored
@@ -38,14 +42,6 @@ jobs:
     #     sudo chmod 666 /var/lib/husarnet/id
     #     sudo chmod 666 /var/lib/husarnet/license.json
     #     sudo chmod 666 /var/lib/husarnet
-    - name: 'Tar files'
-      run: sudo tar -cvf husarnet_v.tar /var/lib/husarnet
-
-    - name: Archive Husarnet ID
-      uses: actions/upload-artifact@v2
-      with:
-        name: husarnet-id
-        path: husarnet_v.tar
 
     - name: Installing platformio & build
       run: |

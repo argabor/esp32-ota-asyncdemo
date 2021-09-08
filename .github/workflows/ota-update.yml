@@ -13,6 +13,11 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
+    - name: Download Husarnet ID
+      uses: actions/download-artifact@v2
+      with:
+        name: husarnet-id
+
       # sudo mkdir -p /var/lib/husarnet && sudo touch $_/id
     - name: Installing & Connecting Husarnet
       run: |
@@ -21,10 +26,13 @@ jobs:
         sleep 5
         sudo husarnet status
         sudo husarnet join ${{ secrets.HUSARNET_JOINCODE }} github
-      with:
-        name: Husarnet ID storage
-        path: /var/lib/husarnet
 
+    - name: Archive Husarnet ID
+      uses: actions/upload-artifact@v2
+      with:
+        name: husarnet-id
+        path: /var/lib/husarnet
+        
     - name: Installing platformio & build
       run: |
         export ENV_WIFI_SSID=${{ secrets.WIFI_SSID }}

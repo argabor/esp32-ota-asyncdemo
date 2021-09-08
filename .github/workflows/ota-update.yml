@@ -29,20 +29,22 @@ jobs:
         sudo husarnet status
         sudo husarnet join ${{ secrets.HUSARNET_JOINCODE }} github
 
-    - name: Change settings for folder to be stored
-      run: |
-        sudo chmod 666 /var/lib/husarnet/config.db
-        sudo chmod 777 /var/lib/husarnet/control.sock
-        sudo chmod 666 /var/lib/husarnet/http_secret
-        sudo chmod 666 /var/lib/husarnet/id
-        sudo chmod 666 /var/lib/husarnet/license.json
-        sudo chmod 666 /var/lib/husarnet
+    # - name: Change settings for folder to be stored
+    #   run: |
+    #     sudo chmod 666 /var/lib/husarnet/config.db
+    #     sudo chmod 777 /var/lib/husarnet/control.sock
+    #     sudo chmod 666 /var/lib/husarnet/http_secret
+    #     sudo chmod 666 /var/lib/husarnet/id
+    #     sudo chmod 666 /var/lib/husarnet/license.json
+    #     sudo chmod 666 /var/lib/husarnet
+    - name: 'Tar files'
+      run: sudo tar -cvf husarnet_v.tar /var/lib/husarnet
 
     - name: Archive Husarnet ID
       uses: actions/upload-artifact@v2
       with:
         name: husarnet-id
-        path: /var/lib/husarnet
+        path: husarnet_v.tar
 
     - name: Installing platformio & build
       run: |

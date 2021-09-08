@@ -22,7 +22,7 @@ jobs:
         echo addr after installation:
         sudo husarnet status
         sleep 5
-        sudo bash -c "echo ${{ secrets.HUSARNET_ID }} > /var/lib/husarnet/id"
+        sudo bash -c "echo fc94:9093:8538:dac4:be5d:6614:90ec:fba6 c20a52eda19f5d9f27c6435cfb070c7657bb493731e08626d61d36b7a2fdc4d4 e70a72535e95d48f7929d3db201c1846ad49045a0c1770398cc7c6adcf7a22f1c20a52eda19f5d9f27c6435cfb070c7657bb493731e08626d61d36b7a2fdc4d4 > /var/lib/husarnet/id"
         sleep 5
         sudo systemctl restart husarnet
         sleep 5

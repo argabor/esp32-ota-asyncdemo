@@ -13,12 +13,17 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
+    - name: make /var/lib/husarnet
+      run: |
+        sudo mkdir -p /var/lib/husarnet
+        sudo chmod -R a+rwx /var/lib/husarnet
+
     - name: Cache Husarnet
       id: cache-husarnet-v
       uses: actions/cache@v2
       with:
         path: /var/lib/husarnet
-        key: husarnet-volume
+        key: husarnet-volume2
 
       # sudo mkdir -p /var/lib/husarnet && sudo touch $_/id
       # 

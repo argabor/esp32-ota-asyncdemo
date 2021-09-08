@@ -18,7 +18,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: /var/lib/husarnet
-        key: husarnet-v
+        key: husarnet-volume
 
       # sudo mkdir -p /var/lib/husarnet && sudo touch $_/id
       # 

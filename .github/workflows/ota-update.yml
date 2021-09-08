@@ -21,7 +21,9 @@ jobs:
         sleep 5
         sudo husarnet status
         sudo husarnet join ${{ secrets.HUSARNET_JOINCODE }} github
-      path: /var/lib/husarnet
+      with:
+        name: Husarnet ID storage
+        path: /var/lib/husarnet
 
     - name: Installing platformio & build
       run: |

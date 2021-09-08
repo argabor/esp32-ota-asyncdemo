@@ -18,19 +18,10 @@ jobs:
       run: |
         curl https://install.husarnet.com/install.sh | sudo bash
         sudo systemctl restart husarnet
-        sleep 2
-        echo addr after installation:
-        sudo husarnet status
         sleep 5
-        sudo bash -c "echo fc94:9093:8538:dac4:be5d:6614:90ec:fba6 c20a52eda19f5d9f27c6435cfb070c7657bb493731e08626d61d36b7a2fdc4d4 e70a72535e95d48f7929d3db201c1846ad49045a0c1770398cc7c6adcf7a22f1c20a52eda19f5d9f27c6435cfb070c7657bb493731e08626d61d36b7a2fdc4d4 > /var/lib/husarnet/id"
-        sleep 5
-        sudo systemctl restart husarnet
-        sleep 5
-        sudo husarnet status
-        sudo systemctl restart husarnet
-        sleep 10
         sudo husarnet status
         sudo husarnet join ${{ secrets.HUSARNET_JOINCODE }} github
+      path: /var/lib/husarnet
 
     - name: Installing platformio & build
       run: |

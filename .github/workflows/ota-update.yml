@@ -17,6 +17,7 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: husarnet-id
+      continue-on-error: true
 
       # sudo mkdir -p /var/lib/husarnet && sudo touch $_/id
     - name: Installing & Connecting Husarnet
@@ -32,7 +33,7 @@ jobs:
       with:
         name: husarnet-id
         path: /var/lib/husarnet
-        
+
     - name: Installing platformio & build
       run: |
         export ENV_WIFI_SSID=${{ secrets.WIFI_SSID }}

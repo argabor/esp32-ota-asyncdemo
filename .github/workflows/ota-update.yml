@@ -27,6 +27,7 @@ jobs:
         curl https://install.husarnet.com/install.sh | sudo bash
         sudo systemctl restart husarnet
         sleep 5
+        sudo chmod -R a+rwx /var/lib/husarnet
         sudo husarnet status
 
     - name: Joining Husarnet network

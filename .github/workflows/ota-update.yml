@@ -25,7 +25,13 @@ jobs:
       run: |
         curl https://install.husarnet.com/install.sh | sudo bash
         sudo systemctl restart husarnet
-        sudo chmod 777 `sudo ls -d "/var/lib/husarnet/"**`
+        sleep 1
+        sudo chmod 666 /var/lib/husarnet/config.db
+        sudo chmod 777 /var/lib/husarnet/control.sock
+        sudo chmod 666 /var/lib/husarnet/http_secret
+        sudo chmod 666 /var/lib/husarnet/id
+        sudo chmod 666 /var/lib/husarnet/license.json
+        sudo chmod 666 /var/lib/husarnet
         sleep 5
         sudo husarnet status
         sudo husarnet join ${{ secrets.HUSARNET_JOINCODE }} github

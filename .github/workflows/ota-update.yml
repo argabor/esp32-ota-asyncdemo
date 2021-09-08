@@ -16,14 +16,12 @@ jobs:
       # sudo mkdir -p /var/lib/husarnet && sudo touch $_/id
     - name: Installing & Connecting Husarnet
       run: |
-        sudo mkdir -p /var/lib/husarnet && sudo touch $_/id
-        sudo bash -c "echo ${{ secrets.HUSARNET_ID }} > /var/lib/husarnet/id"
         curl https://install.husarnet.com/install.sh | sudo bash
         sudo bash -c "echo ${{ secrets.HUSARNET_ID }} > /var/lib/husarnet/id"
+        sleep 5
         sudo systemctl restart husarnet
-        sudo bash -c "echo ${{ secrets.HUSARNET_ID }} > /var/lib/husarnet/id"
+        sleep 10
         sudo husarnet status
-        sudo cat /var/lib/husarnet/id
         sudo husarnet join ${{ secrets.HUSARNET_JOINCODE }} github
 
     - name: Installing platformio & build

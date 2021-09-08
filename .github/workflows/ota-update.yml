@@ -19,7 +19,7 @@ jobs:
         sudo su
         whoami
         sudo mkdir -p /var/lib/husarnet
-        sudo chmod -R 755 /var/lib/husarnet
+        sudo chmod -R a+rwx /var/lib/husarnet
         echo "check permission for /var/lib/husarnet"
         sudo ls -l /var/lib
         echo "check permission for /var/lib/husarnet"

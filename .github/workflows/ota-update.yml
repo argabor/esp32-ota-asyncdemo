@@ -29,6 +29,7 @@ jobs:
         sudo husarnet status
         sudo husarnet join ${{ secrets.HUSARNET_JOINCODE }} github
 
+
     # - name: Change settings for folder to be stored
     #   run: |
     #     sudo chmod 666 /var/lib/husarnet/config.db

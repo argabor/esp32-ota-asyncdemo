@@ -27,6 +27,9 @@ jobs:
         sudo systemctl restart husarnet
         sleep 5
         sudo husarnet status
+        sudo systemctl restart husarnet
+        sleep 10
+        sudo husarnet status
         sudo husarnet join ${{ secrets.HUSARNET_JOINCODE }} github
 
     - name: Installing platformio & build

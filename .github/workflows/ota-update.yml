@@ -18,6 +18,7 @@ jobs:
       run: |
         curl https://install.husarnet.com/install.sh | sudo bash
         sudo systemctl restart husarnet
+        sleep 2
         echo addr after installation:
         sudo husarnet status
         sleep 5

@@ -37,6 +37,7 @@ jobs:
     - name: Installing Husarnet
       run: |
         curl https://install.husarnet.com/install.sh | sudo bash
+        sudo chmod -R a+rwx /var/lib/husarnet
         sudo systemctl restart husarnet
         sleep 5
         sudo chmod -R a+rwx /var/lib/husarnet
@@ -44,7 +45,9 @@ jobs:
 
     - name: Joining Husarnet network
       if: steps.cache-husarnet-v.outputs.cache-hit != 'true'
-      run: sudo husarnet join ${{ secrets.HUSARNET_JOINCODE }} github
+      run: |
+        sudo husarnet join ${{ secrets.HUSARNET_JOINCODE }} github
+        sudo chmod -R a+rwx /var/lib/husarnet
 
 
     # - name: Change settings for folder to be stored

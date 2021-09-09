@@ -18,7 +18,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ${{ github.workspace }}/husarnet_cache
-        key: husarnet-volume8
+        key: husarnet-volume9
 
     - name: Installing Husarnet
       run: |
@@ -54,6 +54,7 @@ jobs:
       run: |
         mkdir -p ${{ github.workspace }}/husarnet_cache
         sudo \cp -af /var/lib/husarnet/. ${{ github.workspace }}/husarnet_cache
+        sudo chmod -R a+rwx ${{ github.workspace }}/husarnet_cache
         
 
 

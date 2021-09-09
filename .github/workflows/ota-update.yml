@@ -55,7 +55,10 @@ jobs:
 
     - name: Joining Husarnet network
       if: steps.cache-husarnet-v.outputs.cache-hit != 'true'
-      run: sudo husarnet join ${{ secrets.HUSARNET_JOINCODE }} github
+      run: |
+        sudo husarnet join ${{ secrets.HUSARNET_JOINCODE }} github
+        sleep 5
+        sudo husarnet status
 
     - name: make husarnet_cache directory
       run: |

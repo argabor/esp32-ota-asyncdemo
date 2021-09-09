@@ -84,7 +84,9 @@ jobs:
     #     ls .pio/build/esp32dev
 
     - name: Pinging ESP32
-      run: ping6 -c 10 ota-test
+      run: |
+        sudo husarnet status
+        ping6 -c 20 ota-test
 
     - name: Husarnet status
       run: sudo husarnet status

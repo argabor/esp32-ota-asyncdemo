@@ -18,13 +18,13 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ${{ github.workspace }}/husarnet_cache
-        key: husarnet-volume5
+        key: husarnet-volume6
 
     - name: Installing Husarnet
       run: |
         curl https://install.husarnet.com/install.sh | sudo bash
         sudo systemctl restart husarnet
-        sleep 5
+        sleep 10
         sudo husarnet status
 
     - name: Copy /var/lib/husarnet

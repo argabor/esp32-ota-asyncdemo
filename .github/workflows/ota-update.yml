@@ -18,7 +18,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ${{ github.workspace }}/husarnet_cache
-        key: husarnet-volume7
+        key: husarnet-volume8
 
     - name: Installing Husarnet
       run: |
@@ -30,11 +30,14 @@ jobs:
     - name: Copy /var/lib/husarnet
       if: steps.cache-husarnet-v.outputs.cache-hit == 'true'
       run: |
-        sudo \cp -af ${{ github.workspace }}/husarnet_cache/. /var/lib/husarnet
-        echo "husarnet cache:"
-        sudo ls -l ${{ github.workspace }}/husarnet_cache
-        echo "content of /var/lib/husarnet:"
+        echo "husarnet cache 1:"
         sudo ls -l /var/lib/husarnet
+        
+        sudo \cp -af ${{ github.workspace }}/husarnet_cache/. /var/lib/husarnet
+
+        echo "husarnet cache 2:"
+        sudo ls -l /var/lib/husarnet
+
         sudo systemctl restart husarnet
         sleep 5
         sudo husarnet status
@@ -46,11 +49,12 @@ jobs:
         sleep 5
         sudo husarnet status
 
+# sudo chmod -R a+rwx ${{ github.workspace }}/husarnet_cache
     - name: create husarnet_cache directory
       run: |
         mkdir -p ${{ github.workspace }}/husarnet_cache
         sudo \cp -af /var/lib/husarnet/. ${{ github.workspace }}/husarnet_cache
-        sudo chmod -R a+rwx ${{ github.workspace }}/husarnet_cache
+        
 
 
     # - name: Change settings for folder to be stored

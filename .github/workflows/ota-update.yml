@@ -32,16 +32,16 @@ jobs:
     - name: Waiting for Husarnet to be ready
       run: |  
         sudo systemctl restart husarnet
-        sleep 1
-        sudo husarnet status
-        sleep 5
+        while [ $(sudo husarnet status | grep "ERROR" | wc -l) -gt 0 ]
+        do
+	        echo .
+	        sleep 1
+        done
         sudo husarnet status
 
     - name: Joining to Husarnet network
       # if: steps.cache-husarnet-v.outputs.cache-hit != 'true'
-      run: |
-        sudo husarnet join ${{ secrets.HUSARNET_JOINCODE }} github
-        sudo husarnet status
+      run: sudo husarnet join ${{ secrets.HUSARNET_JOINCODE }} github
 
     - name: Saving /var/lib/husarnet to cache
       run: |

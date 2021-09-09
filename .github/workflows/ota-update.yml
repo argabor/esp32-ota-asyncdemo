@@ -13,41 +13,55 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: make /var/lib/husarnet
-      run: |
-        whoami
-        sudo su
-        whoami
-        sudo mkdir -p /var/lib/husarnet
-        sudo chmod -R a+rwx /var/lib/husarnet
-        echo "check permission for /var/lib/husarnet"
-        sudo ls -l /var/lib
-        echo "check permission for /var/lib/husarnet"
-        sudo ls -l /var/lib/husarnet
+    # - name: make husarnet_cache directory
+    #   run: |
+    #     mkdir husarnet_cache
+    #     sudo cp -R /var/lib/husarnet ${{ github.workspace }}/husarnet_cache
+
+    #     whoami
+    #     sudo su
+    #     whoami
+    #     sudo mkdir -p /var/lib/husarnet
+    #     sudo chmod -R a+rwx /var/lib/husarnet
+    #     echo "check permission for /var/lib/husarnet"
+    #     sudo ls -l /var/lib
+    #     echo "check permission for /var/lib/husarnet"
+    #     sudo ls -l /var/lib/husarnet
 
     - name: Cache Husarnet
       id: cache-husarnet-v
       uses: actions/cache@v2
       with:
-        path: /var/lib/husarnet
-        key: husarnet-volume2
+        path: ${{ github.workspace }}/husarnet_cache
+        key: husarnet-volume3
 
       # sudo mkdir -p /var/lib/husarnet && sudo touch $_/id
       # 
     - name: Installing Husarnet
       run: |
         curl https://install.husarnet.com/install.sh | sudo bash
+        sudo systemctl restart husarnet
+        sleep 5
+        sudo husarnet status
+
+    - name: Copy /var/lib/husarnet
+      if: steps.cache-husarnet-v.outputs.cache-hit == 'true'
+      run: |
+        sudo cp -R ${{ github.workspace }}/husarnet_cache /var/lib/husarnet
         sudo chmod -R a+rwx /var/lib/husarnet
         sudo systemctl restart husarnet
         sleep 5
-        sudo chmod -R a+rwx /var/lib/husarnet
         sudo husarnet status
 
     - name: Joining Husarnet network
       if: steps.cache-husarnet-v.outputs.cache-hit != 'true'
+      run: sudo husarnet join ${{ secrets.HUSARNET_JOINCODE }} github
+
+    - name: make husarnet_cache directory
       run: |
-        sudo husarnet join ${{ secrets.HUSARNET_JOINCODE }} github
-        sudo chmod -R a+rwx /var/lib/husarnet
+        mkdir husarnet_cache
+        sudo cp -R /var/lib/husarnet ${{ github.workspace }}/husarnet_cache
+        sudo chmod -R a+rwx ${{ github.workspace }}/husarnet_cache
 
 
     # - name: Change settings for folder to be stored
@@ -59,15 +73,15 @@ jobs:
     #     sudo chmod 666 /var/lib/husarnet/license.json
     #     sudo chmod 666 /var/lib/husarnet
 
-    - name: Installing platformio & build
-      run: |
-        export ENV_WIFI_SSID=${{ secrets.WIFI_SSID }}
-        export ENV_WIFI_PASS=${{ secrets.WIFI_PASS }}
-        export ENV_HUSARNET_JOINCODE=${{ secrets.HUSARNET_JOINCODE }}
-        pip3 install -U platformio
-        pio run
-        ls -la
-        ls .pio/build/esp32dev
+    # - name: Installing platformio & build
+    #   run: |
+    #     export ENV_WIFI_SSID=${{ secrets.WIFI_SSID }}
+    #     export ENV_WIFI_PASS=${{ secrets.WIFI_PASS }}
+    #     export ENV_HUSARNET_JOINCODE=${{ secrets.HUSARNET_JOINCODE }}
+    #     pip3 install -U platformio
+    #     pio run
+    #     ls -la
+    #     ls .pio/build/esp32dev
 
     - name: Pinging ESP32
       run: ping6 -c 10 ota-test
@@ -75,15 +89,15 @@ jobs:
     - name: Husarnet status
       run: sudo husarnet status
         
-    - name: Uploading a firmware to ESP32
-      run: >
-        curl -# -v
-        -H 'Accept: */*'
-        -H 'Accept-Encoding: gzip, deflate'
-        -H 'Connection: keep-alive'
-        -F "MD5="$(md5sum "${{ github.workspace }}/.pio/build/esp32dev/firmware.bin" | cut -d ' ' -f 1)""
-        -F 'firmware=@${{ github.workspace }}/.pio/build/esp32dev/firmware.bin'
-        'http://ota-test:3232/update'
+    # - name: Uploading a firmware to ESP32
+    #   run: >
+    #     curl -# -v
+    #     -H 'Accept: */*'
+    #     -H 'Accept-Encoding: gzip, deflate'
+    #     -H 'Connection: keep-alive'
+    #     -F "MD5="$(md5sum "${{ github.workspace }}/.pio/build/esp32dev/firmware.bin" | cut -d ' ' -f 1)""
+    #     -F 'firmware=@${{ github.workspace }}/.pio/build/esp32dev/firmware.bin'
+    #     'http://ota-test:3232/update'
 
-    - name: Testing how much time it takes to go online after reboot
-      run: ping6 -c 50 ota-test
+    # - name: Testing how much time it takes to go online after reboot
+    #   run: ping6 -c 50 ota-test

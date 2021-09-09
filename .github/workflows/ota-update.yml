@@ -35,9 +35,8 @@ jobs:
         sudo ls -l ${{ github.workspace }}/husarnet_cache
         echo "content of /var/lib/husarnet:"
         sudo ls -l /var/lib/husarnet
-        sudo chmod -R a+rwx /var/lib/husarnet
         sudo systemctl restart husarnet
-        sleep 10
+        sleep 5
         sudo husarnet status
 
     - name: Joining Husarnet network

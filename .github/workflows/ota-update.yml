@@ -33,7 +33,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ${{ github.workspace }}/husarnet_cache
-        key: husarnet-volume3
+        key: husarnet-volume4
 
       # sudo mkdir -p /var/lib/husarnet && sudo touch $_/id
       # 

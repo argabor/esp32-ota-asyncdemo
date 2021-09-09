@@ -47,6 +47,7 @@ jobs:
     - name: Copy /var/lib/husarnet
       if: steps.cache-husarnet-v.outputs.cache-hit == 'true'
       run: |
+        sudo rm -rf /var/lib/husarnet
         sudo cp -R ${{ github.workspace }}/husarnet_cache /var/lib/husarnet
         sudo chmod -R a+rwx /var/lib/husarnet
         sudo systemctl restart husarnet

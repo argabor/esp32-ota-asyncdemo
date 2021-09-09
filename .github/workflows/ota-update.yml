@@ -30,7 +30,7 @@ jobs:
     - name: Copy /var/lib/husarnet
       if: steps.cache-husarnet-v.outputs.cache-hit == 'true'
       run: |
-        sudo \cp -rf ${{ github.workspace }}/husarnet_cache /var/lib/husarnet
+        sudo \cp -af ${{ github.workspace }}/husarnet_cache/. /var/lib/husarnet
         echo "husarnet cache:"
         sudo ls -l ${{ github.workspace }}/husarnet_cache
         echo "content of /var/lib/husarnet:"
@@ -50,7 +50,7 @@ jobs:
     - name: create husarnet_cache directory
       run: |
         mkdir -p ${{ github.workspace }}/husarnet_cache
-        sudo \cp -rf /var/lib/husarnet ${{ github.workspace }}/husarnet_cache
+        sudo \cp -af /var/lib/husarnet/. ${{ github.workspace }}/husarnet_cache
         sudo chmod -R a+rwx ${{ github.workspace }}/husarnet_cache
 
 

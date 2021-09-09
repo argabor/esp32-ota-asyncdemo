@@ -32,6 +32,8 @@ jobs:
     - name: Waiting for Husarnet to be ready
       run: |  
         sudo systemctl restart husarnet
+        sleep 1
+        sudo husarnet status
         sleep 5
         sudo husarnet status
 

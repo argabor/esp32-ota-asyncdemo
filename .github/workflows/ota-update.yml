@@ -31,6 +31,9 @@ jobs:
       if: steps.cache-husarnet-v.outputs.cache-hit == 'true'
       run: |
         sudo \cp -rf ${{ github.workspace }}/husarnet_cache /var/lib/husarnet
+        echo "husarnet cache:"
+        sudo ls -l ${{ github.workspace }}/husarnet_cache
+        echo "content of /var/lib/husarnet:"
         sudo ls -l /var/lib/husarnet
         sudo chmod -R a+rwx /var/lib/husarnet
         sudo systemctl restart husarnet

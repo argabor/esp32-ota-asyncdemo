@@ -60,9 +60,9 @@ jobs:
         sleep 5
         sudo husarnet status
 
-    - name: make husarnet_cache directory
+    - name: create husarnet_cache directory
       run: |
-        mkdir husarnet_cache
+        mkdir -p husarnet_cache
         sudo cp -R /var/lib/husarnet ${{ github.workspace }}/husarnet_cache
         sudo chmod -R a+rwx ${{ github.workspace }}/husarnet_cache
 

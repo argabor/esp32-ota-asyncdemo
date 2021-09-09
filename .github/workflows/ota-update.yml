@@ -30,6 +30,7 @@ jobs:
         sudo chown -R root:root /var/lib/husarnet
 
     - name: Waiting for Husarnet to be ready
+      run: |  
         sudo systemctl restart husarnet
         sleep 5
         sudo husarnet status

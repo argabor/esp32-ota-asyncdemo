@@ -13,30 +13,13 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    # - name: make husarnet_cache directory
-    #   run: |
-    #     mkdir husarnet_cache
-    #     sudo cp -R /var/lib/husarnet ${{ github.workspace }}/husarnet_cache
-
-    #     whoami
-    #     sudo su
-    #     whoami
-    #     sudo mkdir -p /var/lib/husarnet
-    #     sudo chmod -R a+rwx /var/lib/husarnet
-    #     echo "check permission for /var/lib/husarnet"
-    #     sudo ls -l /var/lib
-    #     echo "check permission for /var/lib/husarnet"
-    #     sudo ls -l /var/lib/husarnet
-
     - name: Cache Husarnet
       id: cache-husarnet-v
       uses: actions/cache@v2
       with:
         path: ${{ github.workspace }}/husarnet_cache
-        key: husarnet-volume4
+        key: husarnet-volume5
 
-      # sudo mkdir -p /var/lib/husarnet && sudo touch $_/id
-      # 
     - name: Installing Husarnet
       run: |
         curl https://install.husarnet.com/install.sh | sudo bash
@@ -47,8 +30,7 @@ jobs:
     - name: Copy /var/lib/husarnet
       if: steps.cache-husarnet-v.outputs.cache-hit == 'true'
       run: |
-        sudo rm -rf /var/lib/husarnet
-        sudo cp -R ${{ github.workspace }}/husarnet_cache /var/lib/husarnet
+        sudo \cp -rf ${{ github.workspace }}/husarnet_cache /var/lib/husarnet
         sudo chmod -R a+rwx /var/lib/husarnet
         sudo systemctl restart husarnet
         sleep 10
@@ -64,7 +46,7 @@ jobs:
     - name: create husarnet_cache directory
       run: |
         mkdir -p ${{ github.workspace }}/husarnet_cache
-        sudo cp -R /var/lib/husarnet ${{ github.workspace }}/husarnet_cache
+        sudo \cp -rf /var/lib/husarnet ${{ github.workspace }}/husarnet_cache
         sudo chmod -R a+rwx ${{ github.workspace }}/husarnet_cache
 
 

@@ -21,11 +21,7 @@ jobs:
         key: husarnet-vol
 
     - name: Installing Husarnet
-      run: |
-        curl https://install.husarnet.com/install.sh | sudo bash
-        sudo systemctl restart husarnet
-        sleep 10
-        sudo husarnet status
+      run: curl https://install.husarnet.com/install.sh | sudo bash
 
     - name: Restoring /var/lib/husarnet from cache
       if: steps.cache-husarnet-v.outputs.cache-hit == 'true'
@@ -33,6 +29,7 @@ jobs:
         sudo \cp -af ${{ github.workspace }}/husarnet_cache/. /var/lib/husarnet
         sudo chown -R root:root /var/lib/husarnet
 
+    - name: Waiting for Husarnet to be ready
         sudo systemctl restart husarnet
         sleep 5
         sudo husarnet status
@@ -41,10 +38,9 @@ jobs:
       # if: steps.cache-husarnet-v.outputs.cache-hit != 'true'
       run: |
         sudo husarnet join ${{ secrets.HUSARNET_JOINCODE }} github
-        sleep 5
         sudo husarnet status
 
-    - name: Saving /var/lib/husarnet to husarnet_cache directory
+    - name: Saving /var/lib/husarnet to cache
       run: |
         mkdir -p ${{ github.workspace }}/husarnet_cache
         sudo \cp -af /var/lib/husarnet/. ${{ github.workspace }}/husarnet_cache

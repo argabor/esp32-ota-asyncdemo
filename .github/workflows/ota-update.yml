@@ -33,7 +33,7 @@ jobs:
       run: |  
         sudo systemctl restart husarnet
 
-        while [ $(sudo husarnet status | grep "ERROR" | wc -l) -gt 0 ]; do; echo .; sleep 1; done
+        while [ $(sudo husarnet status | grep "ERROR" | wc -l) -gt 0 ]; do echo .; sleep 1; done
 
         sudo husarnet status
 

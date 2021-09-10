@@ -1,7 +1,7 @@
 name: 'Husarnet'
 description: 'Accessing other devices from Husarnet VPN network (https://husarnet.com/) in GitHub workflow'
 inputs:
-  joincode:
+  join-code:
     description: 'A Join Code for the Husarnet network you want to connect to'
     required: true
   hostname: 
@@ -17,6 +17,10 @@ outputs:
   # peers:
   #   description: "Known other Husarnet hosts for this workflow"
   #   value: ...
+branding:
+  icon: 'box'
+  color: 'red'
+  
 runs:
   using: "composite"
   steps:
@@ -27,9 +31,6 @@ runs:
         path: ${{ github.workspace }}/husarnet_cache
         key: ${{ inputs.cache-key }}
 
-    # - name: Installing Husarnet
-    #   shell: bash
-    #   run: curl https://install.husarnet.com/install.sh | sudo bash
     - name: Installing Husarnet
       shell: bash
       run: |
@@ -61,7 +62,7 @@ runs:
   
     - name: Joining to Husarnet network
       shell: bash
-      run: sudo husarnet join ${{ inputs.joincode }} ${{ inputs.hostname }}
+      run: sudo husarnet join ${{ inputs.join-code }} ${{ inputs.hostname }}
 
     - name: Saving /var/lib/husarnet to cache
       shell: bash

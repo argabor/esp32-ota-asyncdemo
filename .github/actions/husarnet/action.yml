@@ -52,9 +52,7 @@ runs:
     - name: Saving IPv6 to the action's output
       id: output-ipv6
       shell: bash
-      run: |
-        echo $(sudo husarnet status | grep "Husarnet IP address" | sed -r 's/Husarnet\sIP\saddress:\s(.*)$/\1/g')
-        echo "::set-output name=host-ipv6::$(echo $(sudo husarnet status | grep "Husarnet IP address" | sed -r 's/Husarnet\sIP\saddress:\s(.*)$/\1/g'))"
+      run: echo "::set-output name=host-ipv6::$(echo $(sudo husarnet status | grep "Husarnet IP address" | sed -r 's/Husarnet\sIP\saddress:\s(.*)$/\1/g'))"
   
     - name: Joining to Husarnet network
       shell: bash

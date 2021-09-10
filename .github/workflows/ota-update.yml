@@ -23,7 +23,7 @@ jobs:
         # cache-enabled: true
 
     - name: Print IPv6
-      run: "echo IPv6 address of this workflow is: ${{ steps.husarnet.outputs.ipv6 }}"
+      run: echo IPv6 address of this workflow is ${{ steps.husarnet.outputs.ipv6 }}
 
     - name: Ping ESP32
       run: ping6 -c 10 ota-test

@@ -30,9 +30,17 @@ runs:
         path: ${{ github.workspace }}/husarnet_cache
         key: ${{ inputs.cache-key }}
 
+    # - name: Installing Husarnet
+    #   shell: bash
+    #   run: curl https://install.husarnet.com/install.sh | sudo bash
     - name: Installing Husarnet
       shell: bash
-      run: curl https://install.husarnet.com/install.sh | sudo bash
+      run: |
+        sudo bash -c "curl https://install.husarnet.com/repo.key | apt-key add -"
+        sudo bash -c "echo 'deb https://install.husarnet.com/deb/ all husarnet' > /etc/apt/sources.list.d/husarnet.list"
+        sudo apt-get install -y apt-transport-https
+        sudo apt-get update
+        sudo apt-get install -y husarnet
 
     - name: Restoring /var/lib/husarnet from a cache
       shell: bash

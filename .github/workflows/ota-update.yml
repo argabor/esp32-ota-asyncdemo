@@ -15,11 +15,15 @@ jobs:
 
     - name: Husarnet VPN
       uses: ./.github/actions/husarnet
+      id: husarnet
       with:
         joincode: ${{ secrets.HUSARNET_JOINCODE }}
         # hostname: my-hostname
         # cache-name: husarnet-v
         # cache-enabled: true
+
+    - name: Print IPv6
+      run: echo ${{ steps.husarnet.outputs.ipv6 }}
 
     # - name: Cache Husarnet
     #   id: cache-husarnet-v

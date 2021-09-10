@@ -31,6 +31,7 @@ runs:
       key: ${{ inputs.cache-key }}
 
   - name: Installing Husarnet
+    shell: bash
     run: curl https://install.husarnet.com/install.sh | sudo bash
 
   - name: Restoring /var/lib/husarnet from cache

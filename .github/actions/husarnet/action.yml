@@ -16,7 +16,7 @@ inputs:
 outputs:
   ipv6:
     description: "Husarnet IPv6 address of this hosts"
-    value: ${{ steps.output-ipv6.host-ipv6 }}
+    value: ${{ steps.output-ipv6.outputs.host-ipv6 }}
   # peers:
   #   description: "Known other Husarnet hosts for this workflow"
   #   value: ...
@@ -34,7 +34,7 @@ runs:
       shell: bash
       run: curl https://install.husarnet.com/install.sh | sudo bash
 
-    - name: Restoring /var/lib/husarnet from cache
+    - name: Restoring /var/lib/husarnet from a cache
       shell: bash
       run: |  
         sudo \cp -af ${{ github.workspace }}/husarnet_cache/. /var/lib/husarnet
@@ -44,7 +44,9 @@ runs:
       shell: bash
       run: |  
         sudo systemctl restart husarnet
-        while [ $(sudo husarnet status | grep "ERROR" | wc -l) -gt 0 ]; do echo .; sleep 1; done
+        echo "Waiting for Husarnet to be ready"
+        while [ $(sudo husarnet status | grep "ERROR" | wc -l) -gt 0 ]; do echo -n .; sleep 1; done
+        echo "done"
         sudo husarnet status
 
     - name: Saving IPv6 to the action's output
@@ -53,7 +55,7 @@ runs:
       run: |
         echo $(sudo husarnet status | grep "Husarnet IP address" | sed -r 's/Husarnet\sIP\saddress:\s(.*)$/\1/g')
         echo "::set-output name=host-ipv6::$(echo $(sudo husarnet status | grep "Husarnet IP address" | sed -r 's/Husarnet\sIP\saddress:\s(.*)$/\1/g'))"
-
+  
     - name: Joining to Husarnet network
       shell: bash
       run: sudo husarnet join ${{ inputs.joincode }} ${{ inputs.hostname }}

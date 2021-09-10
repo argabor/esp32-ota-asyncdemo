@@ -45,7 +45,7 @@ runs:
       run: |  
         sudo systemctl restart husarnet
         echo "Waiting for Husarnet to be ready"
-        while [ $(sudo husarnet status | grep "ERROR" | wc -l) -gt 0 ]; do echo -n .; sleep 1; done
+        while [ $(sudo husarnet status | grep "ERROR" | wc -l) -gt 0 ]; do echo .; sleep 1; done
         echo "done"
         sudo husarnet status
 

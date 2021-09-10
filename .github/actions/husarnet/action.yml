@@ -1,8 +1,8 @@
 name: 'Husarnet'
-description: 'Accessing other devices from Husarnet VPN network in GitHub workflow'
+description: 'Accessing other devices from Husarnet VPN network (https://husarnet.com/) in GitHub workflow'
 inputs:
   joincode:
-    description: 'A JoinCode for the Husarnet network you want to connect to'
+    description: 'A Join Code for the Husarnet network you want to connect to'
     required: true
   hostname: 
     description: 'A hostname under which this workflow will be available in your Husarnet network'
@@ -35,7 +35,6 @@ runs:
       run: curl https://install.husarnet.com/install.sh | sudo bash
 
     - name: Restoring /var/lib/husarnet from cache
-      # if: steps.cache-husarnet-v.outputs.cache-hit == 'true'
       shell: bash
       run: |  
         sudo \cp -af ${{ github.workspace }}/husarnet_cache/. /var/lib/husarnet
@@ -51,10 +50,11 @@ runs:
     - name: Saving IPv6 to the action's output
       id: output-ipv6
       shell: bash
-      run: echo "::set-output name=host-ipv6::$(echo $(sudo husarnet status | grep "Husarnet IP address" | sed -r 's/Husarnet\sIP\saddress:\s(.*)$/\1/g'))"
+      run: |
+        echo $(sudo husarnet status | grep "Husarnet IP address" | sed -r 's/Husarnet\sIP\saddress:\s(.*)$/\1/g')
+        echo "::set-output name=host-ipv6::$(echo $(sudo husarnet status | grep "Husarnet IP address" | sed -r 's/Husarnet\sIP\saddress:\s(.*)$/\1/g'))"
 
     - name: Joining to Husarnet network
-      # if: steps.cache-husarnet-v.outputs.cache-hit != 'true'
       shell: bash
       run: sudo husarnet join ${{ inputs.joincode }} ${{ inputs.hostname }}
 
@@ -64,11 +64,3 @@ runs:
         mkdir -p ${{ github.workspace }}/husarnet_cache
         sudo \cp -af /var/lib/husarnet/. ${{ github.workspace }}/husarnet_cache
         sudo chmod -R a+rwx ${{ github.workspace }}/husarnet_cache
-
-  # - name: Husarnet VPN
-  #   uses: ./.github/actions/husarnet
-  #     with:
-  #       joincode: abcde
-  #       hostname: my-hostname
-  #       cache-id: husarnet-v
-  #       cache-enabled: true

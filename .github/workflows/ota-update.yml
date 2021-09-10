@@ -19,8 +19,7 @@ jobs:
       with:
         joincode: ${{ secrets.HUSARNET_JOINCODE }}
         # hostname: my-hostname
-        # cache-name: husarnet-v
-        # cache-enabled: true
+        # cache-key: husarnet-v
 
     - name: Print IPv6
       run: echo IPv6 address of this workflow is ${{ steps.husarnet.outputs.ipv6 }}

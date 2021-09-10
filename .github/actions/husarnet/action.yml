@@ -10,9 +10,6 @@ inputs:
   cache-key: 
     description: 'Thanks to cache, IPv6 address will be the same in the following job runs. Another cache means generating another peer.'
     default: 'husarnet-volume'
-  cache-enabled: 
-    description: 'Cache is enabled by default, but you can disable it by using this flag'
-    default: true
 outputs:
   ipv6:
     description: "Husarnet IPv6 address of this hosts"

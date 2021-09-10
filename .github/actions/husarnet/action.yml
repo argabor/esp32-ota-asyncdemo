@@ -23,40 +23,42 @@ outputs:
 runs:
   using: "composite"
   steps:
-  - name: Cache Husarnet
-    id: cache-husarnet-v
-    uses: actions/cache@v2
-    with:
-      path: ${{ github.workspace }}/husarnet_cache
-      key: ${{ inputs.cache-key }}
+    - name: Cache Husarnet
+      id: cache-husarnet-v
+      uses: actions/cache@v2
+      with:
+        path: ${{ github.workspace }}/husarnet_cache
+        key: ${{ inputs.cache-key }}
 
-  - name: Installing Husarnet
-    shell: bash
-    run: curl https://install.husarnet.com/install.sh | sudo bash
+    - name: Installing Husarnet
+      shell: bash
+      run: curl https://install.husarnet.com/install.sh | sudo bash
 
-  - name: Restoring /var/lib/husarnet from cache
-    if: steps.cache-husarnet-v.outputs.cache-hit == 'true'
-    run: |  
-      sudo \cp -af ${{ github.workspace }}/husarnet_cache/. /var/lib/husarnet
-      sudo chown -R root:root /var/lib/husarnet
+    - name: Restoring /var/lib/husarnet from cache
+      # if: steps.cache-husarnet-v.outputs.cache-hit == 'true'
+      shell: bash
+      run: |  
+        sudo \cp -af ${{ github.workspace }}/husarnet_cache/. /var/lib/husarnet
+        sudo chown -R root:root /var/lib/husarnet
 
-  - name: Waiting for Husarnet to be ready
-    run: |  
-      sudo systemctl restart husarnet
+    - name: Waiting for Husarnet to be ready
+      shell: bash
+      run: |  
+        sudo systemctl restart husarnet
+        while [ $(sudo husarnet status | grep "ERROR" | wc -l) -gt 0 ]; do echo .; sleep 1; done
+        sudo husarnet status
 
-      while [ $(sudo husarnet status | grep "ERROR" | wc -l) -gt 0 ]; do echo .; sleep 1; done
+    - name: Joining to Husarnet network
+      # if: steps.cache-husarnet-v.outputs.cache-hit != 'true'
+      shell: bash
+      run: sudo husarnet join ${{ inputs.joincode }} ${{ inputs.hostname }}
 
-      sudo husarnet status
-
-  - name: Joining to Husarnet network
-    # if: steps.cache-husarnet-v.outputs.cache-hit != 'true'
-    run: sudo husarnet join ${{ inputs.joincode }} ${{ inputs.hostname }}
-
-  - name: Saving /var/lib/husarnet to cache
-    run: |
-      mkdir -p ${{ github.workspace }}/husarnet_cache
-      sudo \cp -af /var/lib/husarnet/. ${{ github.workspace }}/husarnet_cache
-      sudo chmod -R a+rwx ${{ github.workspace }}/husarnet_cache
+    - name: Saving /var/lib/husarnet to cache
+      shell: bash
+      run: |
+        mkdir -p ${{ github.workspace }}/husarnet_cache
+        sudo \cp -af /var/lib/husarnet/. ${{ github.workspace }}/husarnet_cache
+        sudo chmod -R a+rwx ${{ github.workspace }}/husarnet_cache
 
   # - name: Husarnet VPN
   #   uses: ./.github/actions/husarnet

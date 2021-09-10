@@ -13,6 +13,10 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
+    - name: Installing Husarnet
+      shell: bash
+      run: curl https://install.husarnet.com/install.sh | sudo bash
+
     - name: Husarnet VPN
       uses: ./.github/actions/husarnet
       id: husarnet

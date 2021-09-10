@@ -13,39 +13,47 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Cache Husarnet
-      id: cache-husarnet-v
-      uses: actions/cache@v2
+    - name: Husarnet VPN
+      uses: ./.github/actions/husarnet
       with:
-        path: ${{ github.workspace }}/husarnet_cache
-        key: husarnet-vol
+        joincode: ${{ secrets.HUSARNET_JOINCODE }}
+        # hostname: my-hostname
+        # cache-name: husarnet-v
+        # cache-enabled: true
 
-    - name: Installing Husarnet
-      run: curl https://install.husarnet.com/install.sh | sudo bash
+    # - name: Cache Husarnet
+    #   id: cache-husarnet-v
+    #   uses: actions/cache@v2
+    #   with:
+    #     path: ${{ github.workspace }}/husarnet_cache
+    #     key: husarnet-vol
 
-    - name: Restoring /var/lib/husarnet from cache
-      if: steps.cache-husarnet-v.outputs.cache-hit == 'true'
-      run: |  
-        sudo \cp -af ${{ github.workspace }}/husarnet_cache/. /var/lib/husarnet
-        sudo chown -R root:root /var/lib/husarnet
+    # - name: Installing Husarnet
+    #   run: curl https://install.husarnet.com/install.sh | sudo bash
 
-    - name: Waiting for Husarnet to be ready
-      run: |  
-        sudo systemctl restart husarnet
+    # - name: Restoring /var/lib/husarnet from cache
+    #   if: steps.cache-husarnet-v.outputs.cache-hit == 'true'
+    #   run: |  
+    #     sudo \cp -af ${{ github.workspace }}/husarnet_cache/. /var/lib/husarnet
+    #     sudo chown -R root:root /var/lib/husarnet
 
-        while [ $(sudo husarnet status | grep "ERROR" | wc -l) -gt 0 ]; do echo .; sleep 1; done
+    # - name: Waiting for Husarnet to be ready
+    #   run: |  
+    #     sudo systemctl restart husarnet
 
-        sudo husarnet status
+    #     while [ $(sudo husarnet status | grep "ERROR" | wc -l) -gt 0 ]; do echo .; sleep 1; done
 
-    - name: Joining to Husarnet network
-      # if: steps.cache-husarnet-v.outputs.cache-hit != 'true'
-      run: sudo husarnet join ${{ secrets.HUSARNET_JOINCODE }} github
+    #     sudo husarnet status
 
-    - name: Saving /var/lib/husarnet to cache
-      run: |
-        mkdir -p ${{ github.workspace }}/husarnet_cache
-        sudo \cp -af /var/lib/husarnet/. ${{ github.workspace }}/husarnet_cache
-        sudo chmod -R a+rwx ${{ github.workspace }}/husarnet_cache
+    # - name: Joining to Husarnet network
+    #   # if: steps.cache-husarnet-v.outputs.cache-hit != 'true'
+    #   run: sudo husarnet join ${{ secrets.HUSARNET_JOINCODE }} github
+
+    # - name: Saving /var/lib/husarnet to cache
+    #   run: |
+    #     mkdir -p ${{ github.workspace }}/husarnet_cache
+    #     sudo \cp -af /var/lib/husarnet/. ${{ github.workspace }}/husarnet_cache
+    #     sudo chmod -R a+rwx ${{ github.workspace }}/husarnet_cache
         
     - name: Installing platformio & build
       run: |

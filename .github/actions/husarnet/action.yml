@@ -14,9 +14,9 @@ inputs:
     description: 'Cache is enabled by default, but you can disable it by using this flag'
     default: true
 outputs:
-  # ipv6:
-  #   description: "Husarnet IPv6 address of this hosts"
-  #   value: ${{ steps.random-number-generator.outputs.random-id }}
+  ipv6:
+    description: "Husarnet IPv6 address of this hosts"
+    value: ${{ steps.random-number-generator.outputs.random-id }}
   # peers:
   #   description: "Known other Husarnet hosts for this workflow"
   #   value: ...

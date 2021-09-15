@@ -38,8 +38,8 @@ jobs:
         ls .pio/build/esp32dev
     
     - name: Uploading a firmware to ESP32
-      id: first-try
-      continue-on-error: true
+      # id: first-try
+      # continue-on-error: true
       run: >
         curl -# -v
         -H 'Accept: */*'
@@ -53,7 +53,7 @@ jobs:
         'http://ota-test:3232/update'
 
     - name: Uploading a firmware to ESP32 - 2nd try
-      if: steps.first-try.outcome == 'failure'
+      # if: steps.first-try.outcome == 'failure'
       run: >
         curl -# -v
         -H 'Accept: */*'

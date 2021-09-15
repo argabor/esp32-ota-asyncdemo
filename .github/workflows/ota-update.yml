@@ -36,7 +36,12 @@ jobs:
         pio run
         ls -la
         ls .pio/build/esp32dev
-    
+
+    - name: Uploading a firmware to ESP32
+      # id: first-try
+      # continue-on-error: true
+      run: curl http://ota-test:3232/update/identity
+
     - name: Uploading a firmware to ESP32
       # id: first-try
       # continue-on-error: true
@@ -45,23 +50,7 @@ jobs:
         -H 'Accept: */*'
         -H 'Accept-Encoding: gzip, deflate'
         -H 'Connection: keep-alive'
-        -H 'Origin: http://ota-test:3232'
-        -H 'Referer: http://ota-test:3232/update'
-        -H 'Cookie: visited=1'
         -F "MD5="$(md5sum "${{ github.workspace }}/.pio/build/esp32dev/firmware.bin" | cut -d ' ' -f 1)""
         -F 'firmware=@${{ github.workspace }}/.pio/build/esp32dev/firmware.bin'
         'http://ota-test:3232/update'
 
-    - name: Uploading a firmware to ESP32 - 2nd try
-      # if: steps.first-try.outcome == 'failure'
-      run: >
-        curl -# -v
-        -H 'Accept: */*'
-        -H 'Accept-Encoding: gzip, deflate'
-        -H 'Connection: keep-alive'
-        -H 'Origin: http://ota-test:3232'
-        -H 'Referer: http://ota-test:3232/update'
-        -H 'Cookie: visited=1'
-        -F "MD5="$(md5sum "${{ github.workspace }}/.pio/build/esp32dev/firmware.bin" | cut -d ' ' -f 1)""
-        -F 'firmware=@${{ github.workspace }}/.pio/build/esp32dev/firmware.bin'
-        'http://ota-test:3232/update'

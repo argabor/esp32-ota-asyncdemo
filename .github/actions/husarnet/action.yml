@@ -23,6 +23,9 @@ branding:
   
 runs:
   using: "composite"
+  post:
+    - name: Print hello world
+      run: echo Hello world from post action
   steps:
     - name: Cache Husarnet
       id: cache-husarnet-v

@@ -41,8 +41,13 @@ void setup(void)
 
   // Wait for connection
   while (WiFi.status() != WL_CONNECTED) {
+    int cnt = 0;
     delay(500);
     Serial.print(".");
+    cnt++;
+    if(cnt > 10) {
+      ESP.restart();
+    }
   }
   Serial.println("");
   Serial.print("Connected to ");

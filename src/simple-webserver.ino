@@ -8,14 +8,11 @@
 #include "credentials.h"
 #else
 
-#ifndef WIFI_SSID
-#error You need to define WIFI_SSID!
-#endif
-#ifndef WIFI_PASS
-#error You need to define WIFI_PASS!
+#if !defined(WIFI_SSID) && !defined(WIFI_PASS)
+#error You need to define WIFI credentials - do it in platform.ini!
 #endif
 #ifndef HUSARNET_JOINCODE
-#error You need to define HUSARNET_JOINCODE!
+#error You need to define HUSARNET_JOINCODE - do it in platform.ini!
 #endif
 
 // WiFi credentials

@@ -27,6 +27,9 @@ jobs:
     - name: Ping ESP32
       run: ping6 -c 10 ota-test
 
+    - name: ESP32 software reset
+      run: curl -X POST 'http://ota-test:3232/reset'
+
     - name: Installing platformio & build
       run: |
         export ENV_WIFI_SSID=${{ secrets.WIFI_SSID }}

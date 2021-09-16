@@ -40,8 +40,7 @@ void setup(void)
   Serial.println("");
 
   // Wait for connection
-  while (WiFi.status() != WL_CONNECTED)
-  {
+  while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
@@ -59,6 +58,12 @@ void setup(void)
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(200, "text/plain", "Hi! I am ESP32!!!");
   });
+  server.on("/reset", HTTP_POST, [](AsyncWebServerRequest *request) {
+    request->send(200, "text/plain", "Reseting ESP32 after 1s ...");
+    Serial.println("Software reset on POST request");
+    delay(1000);
+    ESP.restart();
+  });
 
   AsyncElegantOTA.begin(&server); // Start ElegantOTA
   server.begin();
@@ -67,5 +72,5 @@ void setup(void)
 
 void loop(void)
 {
-  AsyncElegantOTA.loop();
+  ;
 }

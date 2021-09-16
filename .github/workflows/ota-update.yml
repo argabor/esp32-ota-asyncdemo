@@ -40,11 +40,6 @@ jobs:
     - name: Uploading a firmware to ESP32
       # id: first-try
       # continue-on-error: true
-      run: curl http://ota-test:3232/update/identity
-
-    - name: Uploading a firmware to ESP32
-      # id: first-try
-      # continue-on-error: true
       run: >
         curl --http0.9 -# -v
         -H 'Accept: */*'

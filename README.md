@@ -19,8 +19,23 @@ curl -# -v -X POST \
   -H 'Accept: */*' \
   -H 'Accept-Encoding: gzip, deflate' \
   -H 'Connection: keep-alive' \
-  --form "MD5="$(md5sum "/home/dominik/tech/esp32_workspace/esp32-ota-asyncdemo/firmware.bin" | cut -d ' ' -f 1)"" \
-  --form 'firmware=@/home/dominik/tech/esp32_workspace/esp32-ota-asyncdemo/firmware.bin'
+  --form "MD5="$(md5sum "/home/dominik/tech/esp32-ota-asyncdemo/.pio/build/esp32dev/firmware.bin" | cut -d ' ' -f 1)"" \
+  --form 'firmware=@/home/dominik/tech/esp32-ota-asyncdemo/.pio/build/esp32dev/firmware.bin'
+```
+
+```bash
+curl -# -v \
+-H 'Accept: */*' \
+-H 'Accept-Encoding: gzip, deflate' \
+-H 'Connection: keep-alive' \
+-H 'Expect:' \
+-H 'Cookie: visited=1' \
+-H 'Accept-Language: en-US,en;q=0.5' \
+-H 'Origin: http://ota-test:3232' \
+-H 'Referer: http://ota-test:3232/update' \
+-F "MD5="$(md5sum "/home/dominik/tech/esp32-ota-asyncdemo/.pio/build/esp32dev/firmware.bin" | cut -d ' ' -f 1)"" \
+-F 'firmware=@/home/dominik/tech/esp32-ota-asyncdemo/.pio/build/esp32dev/firmware.bin' \
+'http://ota-test:3232/update'
 ```
 
 ## Troubleshooting

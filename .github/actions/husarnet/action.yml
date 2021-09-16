@@ -23,9 +23,10 @@ branding:
   
 runs:
   using: "composite"
-  post:
-    - name: Print hello world
-      run: echo Hello world from post action
+  # currently available only for JS actions: https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#post
+  # post:
+  #   - name: Print hello world
+  #     run: echo Hello world from post action
   steps:
     - name: Cache Husarnet
       id: cache-husarnet-v

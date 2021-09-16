@@ -46,7 +46,7 @@ jobs:
       # id: first-try
       # continue-on-error: true
       run: >
-        curl -# -v
+        curl --http0.9 -# -v
         -H 'Accept: */*'
         -H 'Accept-Encoding: gzip, deflate'
         -H 'Connection: keep-alive'

@@ -57905,6 +57905,10 @@ async function run() {
     );
     console.log("output is:" + myOutput.toString());
 
+    await exec.exec(
+      `/bin/bash -c "sudo chown $(whoami):$(whoami) /var/lib/husarnet"`,
+      options_exec
+    );
     await io.cp('/var/lib/husarnet/', cache_paths[0], options_io);
     await cache.saveCache(cache_paths, cachekey);
 

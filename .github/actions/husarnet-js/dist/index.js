@@ -57852,7 +57852,7 @@ async function run() {
     const options_io = { recursive: true, force: true }
 
     const options_exec = {};
-    options.listeners = {
+    options_exec.listeners = {
       stdout: (data) => {
         myOutput = data.toString();
       },
@@ -57888,13 +57888,13 @@ async function run() {
 
     await exec.exec(
       `/bin/bash -c "sudo husarnet status"`,
-      options
+      options_exec
     );
     console.log(myOutput.toString());
 
     await exec.exec(
       `/bin/bash -c "sudo husarnet join ${joincode} ${hostname}"`,
-      options
+      options_exec
     );
     console.log("output is:" + myOutput.toString());
 

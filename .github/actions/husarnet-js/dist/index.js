@@ -57875,17 +57875,13 @@ async function run() {
     
     console.log("starting:" + cache_paths[0]);
 
-    await exec.exec(
-      `/bin/bash -c "sudo mkdir -p /var/lib/husarnet"`,
-      options_exec
-    );
-    await exec.exec(
-      `/bin/bash -c "sudo chown $(whoami):$(whoami) /var/lib/husarnet"`,
-      options_exec
-    );
+    // await exec.exec(
+    //   `/bin/bash -c "sudo chown $(whoami):$(whoami) /var/lib/husarnet"`,
+    //   options_exec
+    // );
 
-    // await io.mkdirP('./husarnet_cache');
-    let result = await cache.restoreCache(cache_paths, cachekey);
+    // // await io.mkdirP('./husarnet_cache');
+    // let result = await cache.restoreCache(cache_paths, cachekey);
     // if ( result != undefined ) {
     //   await io.cp(cache_paths[0], '/var/lib/husarnet/', options_io);
     // }
@@ -57894,6 +57890,15 @@ async function run() {
     await exec.exec(
       `/bin/bash -c "curl https://install.husarnet.com/install.sh | sudo bash"`
     );
+
+    await exec.exec(
+      `/bin/bash -c "sudo chown $(whoami):$(whoami) /var/lib/husarnet"`,
+      options_exec
+    );
+    await cache.restoreCache(cache_paths, cachekey);
+
+    // await io.mkdirP('./husarnet_cache');
+    let result = await cache.restoreCache(cache_paths, cachekey);
 
     // await io.cp('~/husarnet_cache', '/var/lib/husarnet/', options);
 

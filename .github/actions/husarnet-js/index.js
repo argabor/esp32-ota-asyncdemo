@@ -12,7 +12,7 @@ async function run() {
 
     const joincode = core.getInput("join-code");
     const hostname = core.getInput("hostname");
-    const cachekey = core.getInput("cache-key");
+    const cachekey = "my-temp-cache-key"; //core.getInput("cache-key");
 
     let myOutput = "";
     let myError = "";

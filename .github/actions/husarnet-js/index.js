@@ -36,7 +36,7 @@ async function run() {
     // ];
     // const key = "npm-foobar-d5ea0750";
     // const cacheId = await cache.saveCache(paths, key);
-    await io.mkdirP('/var/lib/husarnet');
+    // await io.mkdirP('/var/lib/husarnet');
     const paths = [
       '/var/lib/husarnet',
     ]

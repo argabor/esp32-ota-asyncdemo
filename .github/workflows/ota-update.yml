@@ -10,45 +10,55 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+      - name: Testing js action
+        id: husarnet
+        uses: ./.github/actions/husarnet-js
+        with:
+          join-code: ${{ secrets.HUSARNET_JOINCODE }}
+      
+      - name: Print IPv6
+        run: echo IPv6 address of this workflow is ${{ steps.husarnet.outputs.ipv6 }}
 
-    - name: Husarnet VPN
-      uses: ./.github/actions/husarnet
-      id: husarnet
-      with:
-        join-code: ${{ secrets.HUSARNET_JOINCODE }}
-        # hostname: my-hostname
-        # cache-key: husarnet-v
 
-    - name: Print IPv6
-      run: echo IPv6 address of this workflow is ${{ steps.husarnet.outputs.ipv6 }}
+    # - name: Checkout
+    #   uses: actions/checkout@v2
 
-    - name: Ping ESP32
-      run: ping6 -c 10 ota-test
+    # - name: Husarnet VPN
+    #   uses: ./.github/actions/husarnet
+    #   id: husarnet
+    #   with:
+    #     join-code: ${{ secrets.HUSARNET_JOINCODE }}
+    #     # hostname: my-hostname
+    #     # cache-key: husarnet-v
 
-    - name: ESP32 software reset
-      run: curl -X POST 'http://ota-test:3232/reset'
+    # - name: Print IPv6
+    #   run: echo IPv6 address of this workflow is ${{ steps.husarnet.outputs.ipv6 }}
 
-    - name: Installing platformio & build
-      run: |
-        export ENV_WIFI_SSID=${{ secrets.WIFI_SSID }}
-        export ENV_WIFI_PASS=${{ secrets.WIFI_PASS }}
-        export ENV_HUSARNET_JOINCODE=${{ secrets.HUSARNET_JOINCODE }}
-        pip3 install -U platformio
-        pio run
-        ls -la
-        ls .pio/build/esp32dev
+    # - name: Ping ESP32
+    #   run: ping6 -c 10 ota-test
 
-    - name: Uploading a firmware to ESP32
-      # id: first-try
-      # continue-on-error: true
-      run: >
-        curl --http0.9 -# -v
-        -H 'Accept: */*'
-        -H 'Accept-Encoding: gzip, deflate'
-        -H 'Connection: keep-alive'
-        -F "MD5="$(md5sum "${{ github.workspace }}/.pio/build/esp32dev/firmware.bin" | cut -d ' ' -f 1)""
-        -F 'firmware=@${{ github.workspace }}/.pio/build/esp32dev/firmware.bin'
-        'http://ota-test:3232/update'
+    # - name: ESP32 software reset
+    #   run: curl -X POST 'http://ota-test:3232/reset'
+
+    # - name: Installing platformio & build
+    #   run: |
+    #     export ENV_WIFI_SSID=${{ secrets.WIFI_SSID }}
+    #     export ENV_WIFI_PASS=${{ secrets.WIFI_PASS }}
+    #     export ENV_HUSARNET_JOINCODE=${{ secrets.HUSARNET_JOINCODE }}
+    #     pip3 install -U platformio
+    #     pio run
+    #     ls -la
+    #     ls .pio/build/esp32dev
+
+    # - name: Uploading a firmware to ESP32
+    #   # id: first-try
+    #   # continue-on-error: true
+    #   run: >
+    #     curl --http0.9 -# -v
+    #     -H 'Accept: */*'
+    #     -H 'Accept-Encoding: gzip, deflate'
+    #     -H 'Connection: keep-alive'
+    #     -F "MD5="$(md5sum "${{ github.workspace }}/.pio/build/esp32dev/firmware.bin" | cut -d ' ' -f 1)""
+    #     -F 'firmware=@${{ github.workspace }}/.pio/build/esp32dev/firmware.bin'
+    #     'http://ota-test:3232/update'
 

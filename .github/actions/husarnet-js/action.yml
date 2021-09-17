@@ -1,0 +1,26 @@
+name: 'Husarnet'
+description: 'Accessing other devices from Husarnet VPN network (https://husarnet.com/) in GitHub workflow'
+inputs:
+  join-code:
+    description: 'A Join Code for the Husarnet network you want to connect to'
+    required: true
+  hostname: 
+    description: 'A hostname under which this workflow will be available in your Husarnet network'
+    default: 'my-github-action'
+  cache-key: 
+    description: 'Thanks to cache, IPv6 address will be the same in the following job runs. Another cache means generating another peer.'
+    default: 'husarnet-volume'
+outputs:
+  ipv6:
+    description: "Husarnet IPv6 address of this hosts"
+    value: ${{ steps.output-ipv6.outputs.host-ipv6 }}
+  # peers:
+  #   description: "Known other Husarnet hosts for this workflow"
+  #   value: ...
+branding:
+  icon: 'box'
+  color: 'red'
+  
+runs:
+  using: "node12"
+  main: "dist/index.js"

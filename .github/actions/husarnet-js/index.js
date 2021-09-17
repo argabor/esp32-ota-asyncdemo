@@ -45,7 +45,7 @@ async function run() {
 
     // await io.mkdirP('./husarnet_cache');
     let result = await cache.restoreCache(cache_paths, cachekey);
-    if ( let != undefined ) {
+    if ( result != undefined ) {
       await io.cp(cache_paths[0], '/var/lib/husarnet/', options_io);
     }
 

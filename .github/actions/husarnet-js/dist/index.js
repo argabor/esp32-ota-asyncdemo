@@ -57900,6 +57900,10 @@ async function run() {
     // await io.mkdirP('./husarnet_cache');
     let result = await cache.restoreCache(cache_paths, cachekey);
 
+    await exec.exec(
+      `/bin/bash -c "sudo chown root:root /var/lib/husarnet"`,
+      options_exec
+    );
     // await io.cp('~/husarnet_cache', '/var/lib/husarnet/', options);
 
     await exec.exec(`/bin/bash -c "sudo systemctl restart husarnet"`);

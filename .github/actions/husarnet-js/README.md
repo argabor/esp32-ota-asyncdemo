@@ -2,6 +2,7 @@
 yarn add @actions/github
 yarn add @actions/core
 yarn add @actions/exec
+yarn add @actions/cache
 ```
 
 ## bundling into 1 file

@@ -7630,8 +7630,9 @@ const exec = __nccwpck_require__(1514);
 // most @actions toolkit packages have async methods
 async function run() {
   try {
-    await exec.exec("curl https://install.husarnet.com/install.sh | sudo bash");
-    
+    // https://github.com/actions/toolkit/issues/346
+    await exec.exec(`/bin/bash -c "curl https://install.husarnet.com/install.sh | sudo bash"`);
+
     const joincode = core.getInput("join-code");
     console.log(`JoinCode of this GA: ${joincode}`);
 

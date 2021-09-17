@@ -31,7 +31,7 @@ async function run() {
     };
 
     const cache_paths = [
-      '${{ github.workspace }}/husarnet_cache',
+      './husarnet_cache',
     ]
 
     // const paths = [
@@ -43,9 +43,11 @@ async function run() {
     
     console.log("starting:" + cache_paths[0]);
 
-    await io.mkdirP('./husarnet_cache');
-    await cache.restoreCache(cache_paths, cachekey);
-    await io.cp(cache_paths[0], '/var/lib/husarnet/', options_io);
+    // await io.mkdirP('./husarnet_cache');
+    let result = await cache.restoreCache(cache_paths, cachekey);
+    if ( let != undefined ) {
+      await io.cp(cache_paths[0], '/var/lib/husarnet/', options_io);
+    }
 
     // https://github.com/actions/toolkit/issues/346
     await exec.exec(

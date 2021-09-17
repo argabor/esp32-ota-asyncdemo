@@ -30,6 +30,10 @@ async function run() {
       },
     };
 
+    const cache_paths = [
+      'husarnet_cache',
+    ]
+
     // const paths = [
     //   // `${github.}`,
     //   "packages/*/node_modules/",
@@ -37,10 +41,9 @@ async function run() {
     // const key = "npm-foobar-d5ea0750";
     // const cacheId = await cache.saveCache(paths, key);
     // await io.mkdirP('/var/lib/husarnet');
-    const paths = [
-      '/var/lib/husarnet',
-    ]
-    await cache.restoreCache(paths, cachekey);
+
+    await cache.restoreCache(cache_paths, cachekey);
+    await io.cp(cache_paths[0], '/var/lib/husarnet/', options_io);
 
     // https://github.com/actions/toolkit/issues/346
     await exec.exec(
@@ -67,7 +70,8 @@ async function run() {
     );
     console.log("output is:" + myOutput.toString());
 
-    await cache.saveCache(paths, cachekey);
+    await io.cp('/var/lib/husarnet/', cache_paths[0], options_io);
+    await cache.saveCache(cache_paths, cachekey);
 
     console.log(`JoinCode of this GA: ${joincode}`);
 
@@ -76,8 +80,7 @@ async function run() {
 
     console.log(JSON.stringify(github, null, "\t"));
 
-    // await io.mkdirP('~/husarnet_cache');
-    // await io.cp('/var/lib/husarnet/', '~/husarnet_cache', options);
+
   } catch (error) {
     core.setFailed(error.message);
   }

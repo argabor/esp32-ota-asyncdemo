@@ -57862,7 +57862,7 @@ async function run() {
     };
 
     const cache_paths = [
-      './husarnet_cache',
+      '${{ github.workspace }}/husarnet_cache',
     ]
 
     // const paths = [
@@ -57872,7 +57872,7 @@ async function run() {
     // const key = "npm-foobar-d5ea0750";
     // const cacheId = await cache.saveCache(paths, key);
     
-    console.log("starting");
+    console.log("starting:" + cache_paths[0]);
 
     await io.mkdirP('./husarnet_cache');
     await cache.restoreCache(cache_paths, cachekey);

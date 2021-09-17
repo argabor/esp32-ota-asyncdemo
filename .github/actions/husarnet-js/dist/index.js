@@ -57874,8 +57874,7 @@ async function run() {
         `/bin/bash -c "sudo husarnet status | grep "ERROR" | wc -l"`,
         options
       );
-      console.log(".");
-      await sleep(100);
+      setTimeout(() => { console.log("."); }, 1000);
     } while (parseInt(myOutput) > 0);
     console.log("done");
 

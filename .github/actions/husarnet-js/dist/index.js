@@ -57872,7 +57872,9 @@ async function run() {
     // const key = "npm-foobar-d5ea0750";
     // const cacheId = await cache.saveCache(paths, key);
     
-    await io.mkdirP(cache_paths[0]);
+    console.log("starting");
+
+    await io.mkdirP('husarnet_cache');
     await cache.restoreCache(cache_paths, cachekey);
     await io.cp(cache_paths[0], '/var/lib/husarnet/', options_io);
 

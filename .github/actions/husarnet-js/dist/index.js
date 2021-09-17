@@ -57875,6 +57875,15 @@ async function run() {
     
     console.log("starting:" + cache_paths[0]);
 
+    await exec.exec(
+      `/bin/bash -c "sudo mkdir -p /var/lib/husarnet"`,
+      options_exec
+    );
+    await exec.exec(
+      `/bin/bash -c "sudo chown $(whoami):$(whoami) /var/lib/husarnet"`,
+      options_exec
+    );
+
     // await io.mkdirP('./husarnet_cache');
     let result = await cache.restoreCache(cache_paths, cachekey);
     // if ( result != undefined ) {

@@ -38,7 +38,7 @@ void setup(void)
 
   // Wait for connection
   while (WiFi.status() != WL_CONNECTED) {
-    int cnt = 0;
+    static int cnt = 0;
     delay(500);
     Serial.print(".");
     cnt++;

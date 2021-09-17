@@ -31,7 +31,8 @@ async function run() {
     };
 
     const cache_paths = [
-      './husarnet_cache',
+      // './husarnet_cache',
+      '/var/lib/husarnet',
     ]
 
     // const paths = [
@@ -45,9 +46,9 @@ async function run() {
 
     // await io.mkdirP('./husarnet_cache');
     let result = await cache.restoreCache(cache_paths, cachekey);
-    if ( result != undefined ) {
-      await io.cp(cache_paths[0], '/var/lib/husarnet/', options_io);
-    }
+    // if ( result != undefined ) {
+    //   await io.cp(cache_paths[0], '/var/lib/husarnet/', options_io);
+    // }
 
     // https://github.com/actions/toolkit/issues/346
     await exec.exec(
@@ -78,7 +79,11 @@ async function run() {
       `/bin/bash -c "sudo chown $(whoami):$(whoami) /var/lib/husarnet"`,
       options_exec
     );
-    await io.cp('/var/lib/husarnet/', cache_paths[0], options_io);
+    // await exec.exec(
+    //   `/bin/bash -c "sudo chown $(whoami):$(whoami) /var/lib/husarnet"`,
+    //   options_exec
+    // );
+    // await io.cp('/var/lib/husarnet/', cache_paths[0], options_io);
     await cache.saveCache(cache_paths, cachekey);
 
     console.log(`JoinCode of this GA: ${joincode}`);

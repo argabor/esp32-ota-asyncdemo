@@ -57833,6 +57833,9 @@ const core = __nccwpck_require__(2186);
 const github = __nccwpck_require__(5438);
 const exec = __nccwpck_require__(1514);
 const cache = __nccwpck_require__(7799);
+const io = __nccwpck_require__(7436);
+
+
 
 // most @actions toolkit packages have async methods
 async function run() {
@@ -57840,11 +57843,15 @@ async function run() {
 
     const joincode = core.getInput("join-code");
     const hostname = core.getInput("hostname");
+    const cachekey = core.getInput("cache-key");
 
     let myOutput = "";
     let myError = "";
 
-    const options = {};
+    // Recursive must be true for directories
+    const options_io = { recursive: true, force: true }
+
+    const options_exec = {};
     options.listeners = {
       stdout: (data) => {
         myOutput = data.toString();
@@ -57860,11 +57867,19 @@ async function run() {
     // ];
     // const key = "npm-foobar-d5ea0750";
     // const cacheId = await cache.saveCache(paths, key);
+    await io.mkdirP('/var/lib/husarnet');
+    const paths = [
+      '/var/lib/husarnet',
+    ]
+    await cache.restoreCache(paths, cachekey);
 
     // https://github.com/actions/toolkit/issues/346
     await exec.exec(
       `/bin/bash -c "curl https://install.husarnet.com/install.sh | sudo bash"`
     );
+
+    // await io.cp('~/husarnet_cache', '/var/lib/husarnet/', options);
+
     await exec.exec(`/bin/bash -c "sudo systemctl restart husarnet"`);
 
     console.log("Waiting for Husarnet to be ready");
@@ -57883,13 +57898,17 @@ async function run() {
     );
     console.log("output is:" + myOutput.toString());
 
-    
+    await cache.saveCache(paths, cachekey);
+
     console.log(`JoinCode of this GA: ${joincode}`);
 
     const ipv6 = "fc94:2283:b56b:beeb:xxxx:xxxx:xxxx:xxxx";
     core.setOutput("ipv6", ipv6);
 
     console.log(JSON.stringify(github, null, "\t"));
+
+    // await io.mkdirP('~/husarnet_cache');
+    // await io.cp('/var/lib/husarnet/', '~/husarnet_cache', options);
   } catch (error) {
     core.setFailed(error.message);
   }

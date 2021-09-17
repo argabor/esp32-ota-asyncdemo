@@ -37,9 +37,7 @@ async function run() {
     await exec.exec(`/bin/bash -c "sudo systemctl restart husarnet"`);
 
     console.log("Waiting for Husarnet to be ready");
-
     await exec.exec(`/bin/bash -c "while [ $(sudo husarnet status | grep "ERROR" | wc -l) -gt 0 ]; do echo .; sleep 1; done"`);
-
     console.log("done");
 
     await exec.exec(
@@ -52,7 +50,7 @@ async function run() {
       `/bin/bash -c "sudo husarnet join ${joincode} ${hostname}"`,
       options
     );
-    console.log(myOutput.toString());
+    console.log("output is:" + myOutput.toString());
 
     
     console.log(`JoinCode of this GA: ${joincode}`);

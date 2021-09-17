@@ -38,13 +38,8 @@ async function run() {
 
     console.log("Waiting for Husarnet to be ready");
 
-    do {
-      await exec.exec(
-        `/bin/bash -c "sudo husarnet status | grep "ERROR" | wc -l"`,
-        options
-      );
-      setTimeout(() => { console.log("."); }, 1000);
-    } while (parseInt(myOutput) > 0);
+    await exec.exec(`/bin/bash -c "while [ $(sudo husarnet status | grep "ERROR" | wc -l) -gt 0 ]; do echo .; sleep 1; done"`);
+
     console.log("done");
 
     await exec.exec(
@@ -54,7 +49,7 @@ async function run() {
     console.log(myOutput.toString());
 
     await exec.exec(
-      `sudo husarnet join ${joincode} ${hostname}`,
+      `/bin/bash -c "sudo husarnet join ${joincode} ${hostname}"`,
       options
     );
     console.log(myOutput.toString());

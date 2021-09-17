@@ -7625,26 +7625,26 @@ const core = __nccwpck_require__(2186);
 const github = __nccwpck_require__(5438);
 const exec = __nccwpck_require__(1514);
 
-(async () => {
+
+
+// most @actions toolkit packages have async methods
+async function run() {
   try {
-    await exec.exec('curl https://install.husarnet.com/install.sh | sudo bash');
-  } catch (e) {
-      // Deal with the fact the chain failed
+    await exec.exec("curl https://install.husarnet.com/install.sh | sudo bash");
+    
+    const joincode = core.getInput("join-code");
+    console.log(`JoinCode of this GA: ${joincode}`);
+
+    const ipv6 = "fc94:2283:b56b:beeb:xxxx:xxxx:xxxx:xxxx";
+    core.setOutput("ipv6", ipv6);
+
+    console.log(JSON.stringify(github, null, "\t"));
+  } catch (error) {
+    core.setFailed(error.message);
   }
-})();
-
-try {
-  
-  const joincode = core.getInput("join-code");
-  console.log(`JoinCode of this GA: ${joincode}`);
-
-  const ipv6 = "fc94:2283:b56b:beeb:xxxx:xxxx:xxxx:xxxx";
-  core.setOutput("ipv6", ipv6);
-
-  console.log(JSON.stringify(github, null, "\t"));
-} catch (error) {
-  core.setFailed(error.message);
 }
+
+run();
 
 })();
 

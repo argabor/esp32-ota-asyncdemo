@@ -46,11 +46,10 @@ void setup(void)
       ESP.restart();
     }
   }
-  Serial.println("");
-  Serial.print("Connected to ");
-  Serial.println(ssid);
-  Serial.print("IP address: ");
+  Serial.printf("\r\nConnected to %s\r\n", ssid);
+  Serial.print("IP address in LAN: ");
   Serial.println(WiFi.localIP());
+  Serial.printf("Husarnet VPN hostname: %s", hostName);
 
   // Start Husarnet
   Husarnet.selfHostedSetup(dashboardURL);
@@ -60,6 +59,7 @@ void setup(void)
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(200, "text/plain", "Hi! I am ESP32!!!");
   });
+
   server.on("/reset", HTTP_POST, [](AsyncWebServerRequest *request) {
     request->send(200, "text/plain", "Reseting ESP32 after 1s ...");
     Serial.println("Software reset on POST request");
@@ -69,6 +69,7 @@ void setup(void)
 
   AsyncElegantOTA.begin(&server); // Start ElegantOTA
   server.begin();
+  
   Serial.println("HTTP server started");
 }
 

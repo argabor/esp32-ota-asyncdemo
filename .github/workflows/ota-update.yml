@@ -18,14 +18,6 @@ jobs:
       id: husarnet
       with:
         join-code: ${{ secrets.HUSARNET_JOINCODE }}
-        # hostname: my-hostname
-        # cache-key: husarnet-v
-
-    - name: Print IPv6
-      run: echo IPv6 address of this workflow is ${{ steps.husarnet.outputs.ipv6 }}
-
-    - name: Ping ESP32
-      run: ping6 -c 10 ota-test
 
     - name: ESP32 software reset
       run: curl -X POST 'http://ota-test:3232/reset'
@@ -41,8 +33,6 @@ jobs:
         ls .pio/build/esp32dev
 
     - name: Uploading a firmware to ESP32
-      # id: first-try
-      # continue-on-error: true
       run: >
         curl --http0.9 -# -v
         -H 'Accept: */*'

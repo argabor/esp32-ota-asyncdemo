@@ -1,4 +1,4 @@
-name: Upload ISO file
+name: ESP32 OTA update
 
 on:
   push:

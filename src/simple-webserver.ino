@@ -4,6 +4,8 @@
 #include <AsyncElegantOTA.h>
 #include <Husarnet.h>
 
+#define BUFFER_SIZE 2000
+
 #if __has_include("credentials.h")
 #include "credentials.h"
 #else
@@ -30,13 +32,17 @@ AsyncWebServer server(3232);
 
 void setup(void)
 {
+  // ===============================================
+  // Wi-Fi, OTA and Husarnet VPN configuration
+  // ===============================================
+
   Serial.begin(115200);
   Serial.printf("Connecting to: %s Wi-Fi network", ssid);
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
   Serial.println("");
 
-  // Wait for connection
+  // Waitinf for Wi-Fi connection
   while (WiFi.status() != WL_CONNECTED) {
     static int cnt = 0;
     delay(500);
@@ -51,15 +57,12 @@ void setup(void)
   Serial.println(WiFi.localIP());
   Serial.printf("Husarnet VPN hostname: %s", hostName);
 
-  // Start Husarnet
+  // Start Husarnet P2P VPN service
   Husarnet.selfHostedSetup(dashboardURL);
   Husarnet.join(husarnetJoinCode, hostName);
   Husarnet.start();
 
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
-    request->send(200, "text/plain", "Hi! I am ESP32!!!");
-  });
-
+  // POST request API for ESP32 remote reset
   server.on("/reset", HTTP_POST, [](AsyncWebServerRequest *request) {
     request->send(200, "text/plain", "Reseting ESP32 after 1s ...");
     Serial.println("Software reset on POST request");
@@ -67,9 +70,30 @@ void setup(void)
     ESP.restart();
   });
 
+  // OTA webserver: /update path
   AsyncElegantOTA.begin(&server); // Start ElegantOTA
   server.begin();
   
+  // ===============================================
+  // PLACE YOUR APPLICATION CODE BELOW
+  // ===============================================
+
+  // Example webserver hosting table with known Husarnet Hosts
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
+    char buffer[BUFFER_SIZE];
+    int i = 0;
+    i += sprintf(buffer+i, "Known hosts: </br></br>");
+    i += sprintf(buffer+i, "<table border=\"1\"><tr><th>Hostname</th><th>IPv6</th></tr>");
+    for (auto const &host : Husarnet.listPeers()) {
+      i += sprintf(buffer+i, "<tr><td>%s</td><td>%s</td></tr>", host.second.c_str(), host.first.toString().c_str());
+      if(BUFFER_SIZE - i < 100) {
+        i += sprintf(buffer+i, "<td>Increase the BUFFER_SIZE</td>");
+      }
+    }
+    i += sprintf(buffer+i, "</table>");
+    request->send(200, "text/html", String(buffer));
+  });
+
   Serial.println("HTTP server started");
 }
 

@@ -87,7 +87,7 @@ void setup(void)
 
   // Example webserver hosting table with known Husarnet Hosts
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
-    request->send(200, "text/html", "Hello world!!!");
+    request->send(200, "text/plain", "Hello world!!!");
   });
 
   Serial1.println("🚀 HTTP server started\r\n");

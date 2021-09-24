@@ -13,8 +13,8 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Husarnet VPN
-      uses: ./.github/actions/husarnet
+    - name: Connecting to Husarnet VPN network
+      uses: husarnet/husarnet-action@v1
       id: husarnet
       with:
         join-code: ${{ secrets.HUSARNET_JOINCODE }}

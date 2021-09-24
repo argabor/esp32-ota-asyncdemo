@@ -11,13 +11,6 @@
 #include "credentials.h"
 #else
 
-#if !defined(WIFI_SSID) && !defined(WIFI_PASS)
-#error You need to define WIFI credentials - do it in platform.ini!
-#endif
-#ifndef HUSARNET_JOINCODE
-#error You need to define HUSARNET_JOINCODE - do it in platform.ini!
-#endif
-
 // WiFi credentials
 const char *ssid = WIFI_SSID;
 const char *password = WIFI_PASS;
@@ -29,6 +22,13 @@ const char *dashboardURL = "default";
 
 #endif
 
+#if !defined(WIFI_SSID) && !defined(WIFI_PASS)
+#error You need to define WIFI credentials - do it in platform.ini!
+#endif
+#ifndef HUSARNET_JOINCODE
+#error You need to define HUSARNET_JOINCODE - do it in platform.ini!
+#endif
+
 AsyncWebServer server(HTTP_PORT);
 
 void setup(void)
@@ -37,15 +37,19 @@ void setup(void)
   // Wi-Fi, OTA and Husarnet VPN configuration
   // ===============================================
 
-  Serial.begin(115200,SERIAL_8N1, 16, 17); // remap default Serial from P3 & P1 to P16 & P17
+  Serial.begin(115200,SERIAL_8N1, 16, 17); // remap default Serial used by Husarnet logs from P3 & P1 to P16 & P17
   Serial1.begin(115200,SERIAL_8N1, 3, 1); // remap Serial1 from P9 & P10 to P3 & P1
 
+  Serial1.println("**************************************");
   Serial1.println("GitHub Actions OTA example");
-  Serial1.printf("📻 Connecting to: %s Wi-Fi network ", ssid);
+  Serial1.println("**************************************");
+  Serial1.println("");
+
+  // Init Wi-Fi 
+  Serial1.printf("📻 1. Connecting to: %s Wi-Fi network ", ssid);
+  
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
-
-  // Waiting for Wi-Fi connection
   while (WiFi.status() != WL_CONNECTED) {
     static int cnt = 0;
     delay(500);
@@ -55,14 +59,19 @@ void setup(void)
       ESP.restart();
     }
   }
-  Serial1.println(" done");
+  
+  Serial1.println(" done\r\n");
 
-  // Start Husarnet P2P VPN service
+  // Init Husarnet P2P VPN service
   Husarnet.selfHostedSetup(dashboardURL);
   Husarnet.join(husarnetJoinCode, hostName);
   Husarnet.start();
 
-  // POST request API for ESP32 remote reset
+  Serial1.printf("⌛ 2. Waiting for Husarnet to be ready ... ");
+  delay(15000); // TODO: check connection status instead
+  Serial1.println("done\r\n");
+
+  // define HTTP API for remote reset
   server.on("/reset", HTTP_POST, [](AsyncWebServerRequest *request) {
     request->send(200, "text/plain", "Reseting ESP32 after 1s ...");
     Serial1.println("Software reset on POST request");
@@ -70,8 +79,8 @@ void setup(void)
     ESP.restart();
   });
 
-  // OTA webserver: /update path
-  AsyncElegantOTA.begin(&server); // Start ElegantOTA
+  // Init OTA webserver (available under /update path)
+  AsyncElegantOTA.begin(&server);
   server.begin();
   
   // ===============================================
@@ -94,10 +103,7 @@ void setup(void)
     request->send(200, "text/html", String(buffer));
   });
 
-  Serial1.println("⌛ Waiting for Husarnet to be ready");
-  delay(15000); // TODO: check connection status instead
-
-  Serial1.println("🚀 HTTP server started");
+  Serial1.println("🚀 HTTP server started\r\n");
   Serial1.printf("Visit:\r\nhttp://%s:%d/\r\n", hostName, HTTP_PORT);
 }
 

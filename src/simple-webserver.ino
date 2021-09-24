@@ -5,6 +5,7 @@
 #include <Husarnet.h>
 
 #define BUFFER_SIZE 2000
+#define HTTP_PORT 3232
 
 #if __has_include("credentials.h")
 #include "credentials.h"
@@ -28,7 +29,7 @@ const char *dashboardURL = "default";
 
 #endif
 
-AsyncWebServer server(3232);
+AsyncWebServer server(HTTP_PORT);
 
 void setup(void)
 {
@@ -36,26 +37,25 @@ void setup(void)
   // Wi-Fi, OTA and Husarnet VPN configuration
   // ===============================================
 
-  Serial.begin(115200);
-  Serial.printf("Connecting to: %s Wi-Fi network", ssid);
+  Serial.begin(115200,SERIAL_8N1, 16, 17); // remap default Serial from P3 & P1 to P16 & P17
+  Serial1.begin(115200,SERIAL_8N1, 3, 1); // remap Serial1 from P9 & P10 to P3 & P1
+
+  Serial1.println("GitHub Actions OTA example");
+  Serial1.printf("📻 Connecting to: %s Wi-Fi network ", ssid);
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
-  Serial.println("");
 
-  // Waitinf for Wi-Fi connection
+  // Waiting for Wi-Fi connection
   while (WiFi.status() != WL_CONNECTED) {
     static int cnt = 0;
     delay(500);
-    Serial.print(".");
+    Serial1.print(".");
     cnt++;
     if(cnt > 10) {
       ESP.restart();
     }
   }
-  Serial.printf("\r\nConnected to %s\r\n", ssid);
-  Serial.print("IP address in LAN: ");
-  Serial.println(WiFi.localIP());
-  Serial.printf("Husarnet VPN hostname: %s", hostName);
+  Serial1.println(" done");
 
   // Start Husarnet P2P VPN service
   Husarnet.selfHostedSetup(dashboardURL);
@@ -65,7 +65,7 @@ void setup(void)
   // POST request API for ESP32 remote reset
   server.on("/reset", HTTP_POST, [](AsyncWebServerRequest *request) {
     request->send(200, "text/plain", "Reseting ESP32 after 1s ...");
-    Serial.println("Software reset on POST request");
+    Serial1.println("Software reset on POST request");
     delay(1000);
     ESP.restart();
   });
@@ -94,7 +94,11 @@ void setup(void)
     request->send(200, "text/html", String(buffer));
   });
 
-  Serial.println("HTTP server started");
+  Serial1.println("⌛ Waiting for Husarnet to be ready");
+  delay(15000); // TODO: check connection status instead
+
+  Serial1.println("🚀 HTTP server started");
+  Serial1.printf("Visit:\r\nhttp://%s:%d/\r\n", hostName, HTTP_PORT);
 }
 
 void loop(void)
